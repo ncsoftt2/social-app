@@ -18,6 +18,12 @@ function App() {
           Learn React
         </a>
       </header>
+      <h3>10</h3>
+      <h3>10</h3>
+      <h3>10</h3>
+      <h3>10</h3>
+      <h3>10</h3>
+      <h3>10</h3>
     </div>
   );
 }
