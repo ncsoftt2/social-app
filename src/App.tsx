@@ -11,7 +11,7 @@ function App() {
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, officia.</p>
         <a
           className="App-link"
-          href="https://reactjs2.org"
+          href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"
         >
