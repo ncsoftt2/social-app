@@ -1,0 +1,9 @@
+.app{
+    margin: 10px 0;
+}
+.content {
+    display:flex;
+    margin-top: 20px;
+    padding: 10px;
+    gap: 20px;
+}

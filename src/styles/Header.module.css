@@ -1,0 +1,21 @@
+.header{
+    background: #e89e9e;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+header a {
+    color: inherit;
+}
+.logo{
+    font-size: 20px;
+    color: #3a3a3a;
+}
+.header_desc {
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+    padding: 7px;
+    font-size: 18px;
+    font-weight: 400;
+}

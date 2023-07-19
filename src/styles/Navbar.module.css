@@ -1,0 +1,28 @@
+.section {
+    width: 210px;
+    height: 400px;
+    border: 1px solid rgba(0, 0, 0, 0.13);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.nav_item {
+    margin: 5px 0;
+}
+.nav_item:first-child{
+    margin-top: 0;
+}
+.link {
+    color: #464646;
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.link:hover {
+    color: black;
+}
+
+.link.active {
+    color: #4dbaff;
+}

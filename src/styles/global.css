@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,700;0,900;1,100;1,500;1,700;1,900&family=Raleway:wght@100;200;400;500;700&display=swap');
+
+body {
+    background: #efefef;
+    width: 1300px;
+    margin: 0 auto;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin:0;
+    padding:0;
+}
+*,
+*::after,
+*::before{
+    box-sizing: border-box;
+}
+ul {
+    margin: 0;
+    padding:0
+}
+li{
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    border:none;
+    font-size: 16px;
+    padding: 5px 10px;
+    background: #948fbc;
+    border-radius: 4px;
+    color:white;
+}
