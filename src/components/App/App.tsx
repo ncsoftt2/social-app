@@ -13,7 +13,7 @@ const App = () => {
             <section className={'content'}>
                 <Navbar />
                 <Routes>
-                    <Route path={'/'} element={<Profile />}/>
+                    <Route path={'/profile'} element={<Profile />}/>
                     <Route path={'/dialogs'} element={<Dialogs />}/>
                 </Routes>
             </section>

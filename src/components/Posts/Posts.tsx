@@ -6,7 +6,10 @@ import styles from '../../styles/Posts.module.css';
 const Posts = () => {
     return (
         <section>
-
+            <div className={styles.textarea}>
+                <div><textarea /></div>
+                <div><button>отправить</button></div>
+            </div>
             <ul className={styles.posts}>
                 <Post message={'first post'} likeCount={0}/>
                 <Post message={'second post'} likeCount={5}/>
