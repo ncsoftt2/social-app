@@ -30,3 +30,9 @@
 .link.active {
     color: #373aa4;
 }
+
+.messages_item{
+    font-size: 15px;
+    color: #3f3f3f;
+    margin: 10px 0;
+}
