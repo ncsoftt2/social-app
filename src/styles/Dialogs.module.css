@@ -1,0 +1,32 @@
+.section{
+    display: flex;
+    border:1px solid rgba(0, 0, 0, 0.13);
+    width: 100%;
+}
+
+.dialog{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 200px;
+    font-size: 18px;
+    color: #1e99e5;
+    cursor: pointer;
+    padding: 5px;
+    background: #e7e7e7;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.13);
+    border-right: 1px solid rgba(0, 0, 0, 0.13);
+}
+.dialog img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.dialog:hover{
+    background: white;
+}
+
+.link.active {
+    color: #373aa4;
+}

@@ -39,26 +39,6 @@ const Dialogs = () => {
                         <div>Name 3</div>
                     </li>
                 </NavLink>
-                {/*<li className={styles.dialog}>*/}
-                {/*    <NavLink to={'/dialogs/1'}*/}
-                {/*             className={({isActive}) => `${styles.link} ${isActive ? styles.active : null}` }*/}
-                {/*    >Jett</NavLink>*/}
-                {/*</li>*/}
-                {/*<li className={styles.dialog}>*/}
-                {/*    <NavLink to={'/dialogs/2'}*/}
-                {/*             className={({isActive}) => `${styles.link} ${isActive ? styles.active : null}` }*/}
-                {/*    >Sage</NavLink>*/}
-                {/*</li>*/}
-                {/*<li className={styles.dialog}>*/}
-                {/*    <NavLink to={'/dialogs/3'}*/}
-                {/*             className={({isActive}) => `${styles.link} ${isActive ? styles.active : null}` }*/}
-                {/*    >Reyna</NavLink>*/}
-                {/*</li>*/}
-                {/*<li className={styles.dialog}>*/}
-                {/*    <NavLink to={'/dialogs/4'}*/}
-                {/*             className={({isActive}) => `${styles.link} ${isActive ? styles.active : null}` }*/}
-                {/*    >Raze</NavLink>*/}
-                {/*</li>*/}
             </ul>
             <ul className={styles.messages_item}>
                 <li className={styles.message}>message 1</li>
