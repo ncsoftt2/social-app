@@ -1,10 +1,14 @@
 import React from 'react';
-import Posts from "../Posts/Posts";
+import Posts from "./Posts";
+import ProfileInfo from "./ProfileInfo";
+import {IPropsType} from "../../index";
 
-const Profile = () => {
+const Profile:React.FC<IPropsType> = ({posts}) => {
+    console.log(posts)
     return (
         <section>
-            <Posts />
+            <ProfileInfo />
+            <Posts posts={posts}/>
         </section>
     )
 }

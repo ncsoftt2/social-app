@@ -1,9 +1,9 @@
 import React from 'react';
 import Post from "./Post";
+import styles from '../../styles/Posts.module.css'
+import {IPropsType} from "../../index";
 
-import styles from '../../styles/Posts.module.css';
-
-const Posts = () => {
+const Posts:React.FC<IPropsType> = ({posts}) => {
     return (
         <section>
             <div className={styles.textarea}>
@@ -11,10 +11,7 @@ const Posts = () => {
                 <div><button>отправить</button></div>
             </div>
             <ul className={styles.posts}>
-                <Post message={'first post'} likeCount={0}/>
-                <Post message={'second post'} likeCount={5}/>
-                <Post message={'third post'} likeCount={2}/>
-                <Post message={'fourth post'} likeCount={34}/>
+                {posts && posts.map(({message,id,likeCount}) => <Post key={id} message={message} likeCount={likeCount}/>)}
             </ul>
         </section>
     );

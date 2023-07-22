@@ -23,7 +23,6 @@ const DialogsItem: React.FC<PropsType> = ({name, id}) => {
                     <div>{name}</div>
                 </div>
             </NavLink>
-
         </>
     );
 };
