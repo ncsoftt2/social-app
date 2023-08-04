@@ -1,11 +1,11 @@
 import React from 'react';
-
 import styles from './../../styles/Navbar.module.css';
 import {NavLink} from "react-router-dom";
+import {NavbarWrapper} from "../../StyledComponents/NavbarWrapper";
 
 const Navbar = () => {
     return (
-        <section className={styles.section}>
+        <NavbarWrapper>
             <nav>
                 <ul>
                     <li className={styles.nav_item}>
@@ -25,7 +25,7 @@ const Navbar = () => {
                     </li>
                 </ul>
             </nav>
-        </section>
+        </NavbarWrapper>
     );
 };
 
