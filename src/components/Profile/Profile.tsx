@@ -1,10 +1,10 @@
 import React from 'react';
 import Posts from "./Posts";
 import ProfileInfo from "./ProfileInfo";
-import {IPropsType} from "../../index";
+import {ProfilePageType} from "../../store/state";
 
-const Profile:React.FC<IPropsType> = ({posts}) => {
-    console.log(posts)
+
+const Profile:React.FC<ProfilePageType> = ({posts}) => {
     return (
         <section>
             <ProfileInfo />

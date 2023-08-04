@@ -2,10 +2,10 @@ import React from 'react';
 import styles from '../../styles/Dialogs.module.css'
 import DialogsItem from "./DialogsItem";
 import DialogsMessages from "./DialogsMessages";
-import {IPropsType} from "../../index";
+import {DialogsPageType} from "../../store/state";
 
-const Dialogs: React.FC<IPropsType> = ({dialogs,messages}) => {
 
+const Dialogs: React.FC<DialogsPageType> = ({dialogs,messages}) => {
     return (
         <section className={styles.section}>
             <nav>
