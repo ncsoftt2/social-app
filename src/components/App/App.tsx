@@ -11,7 +11,6 @@ import {ContentWrapper} from "../../StyledComponents/ContentWrapper";
 const App = () => {
     return (
         <AppWrapper>
-            test
             <Header />
             <ContentWrapper>
                 <Navbar />
