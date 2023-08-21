@@ -1,6 +1,7 @@
 import {combineReducers, compose, createStore} from "redux";
 import profileReducer from "./profile-reducer/profile-reducer";
 import dialogsReducer from "./dialogs-reducer/dialogs-reducer";
+import userReducer from "./user-reducer/userReducer";
 
 declare global {
     interface Window {
@@ -11,8 +12,13 @@ declare global {
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const store = createStore(
-    combineReducers({profileReducer, dialogsReducer})
-    ,composeEnhancers()
+    combineReducers({
+            profileReducer,
+            dialogsReducer,
+            userReducer,
+        }
+    )
+    , composeEnhancers()
 )
 
 export default store
