@@ -1,18 +1,26 @@
-import React from 'react';
-import {DialogsPageType} from "../../store/state";
+import React, {ChangeEvent} from 'react';
 import styled from "styled-components";
 import {NavLink} from "react-router-dom";
-import styles from "../../styles/Dialogs.module.css";
+import {useAppDispatch, useAppSelector} from "../../store/hooks";
+import {addNewMessageAC, updateDialogBodyMessageAC} from "../../store/dialogs-reducer/dialogs-reducer";
 
 const image = 'https://cdn.theatlantic.com/media/img/photo/2018/10/images-of-the-season-fall-is-in-the/f02_RTX6EJJJ-1/original.jpg'
 
 
-
-const Dialogs: React.FC<DialogsPageType> = ({dialogs,messages}) => {
+const Dialogs = () => {
+    const {messages,dialogMessage,dialogs}  = useAppSelector(({dialogsReducer}) => dialogsReducer)
+    const dispatch = useAppDispatch()
+    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        dispatch(updateDialogBodyMessageAC(e.currentTarget.value))
+    }
+    const handleAddNewMessage = () => {
+        if(dialogMessage.trim().length !== 0 ) {
+            dispatch(addNewMessageAC(dialogMessage.trim()))
+        }
+    }
     const dialogsItem = dialogs.map(({id,name}) =>   {
         return (
-
-                <NavLink to={`/dialogs/${id}`}>
+                <NavLink to={`/dialogs/${id}`} key={id}>
                     <DialogWrapper>
                         <img src={image} alt={"avatar"}/>
                         <span>{name}</span>
@@ -31,9 +39,15 @@ const Dialogs: React.FC<DialogsPageType> = ({dialogs,messages}) => {
             <nav>
                 {dialogsItem}
             </nav>
-            <ul>
-                {dialogsMessages}
-            </ul>
+            <TAWrapper>
+                <ul>
+                    {dialogsMessages}
+                </ul>
+                <div>
+                    <textarea value={dialogMessage} onChange={handleChange}/>
+                    <button onClick={handleAddNewMessage}>&gt;</button>
+                </div>
+            </TAWrapper>
         </DialogsWrapper>
     );
 };
@@ -89,5 +103,21 @@ const DialogWrapper = styled.div`
     width: 40px;
     height: 40px;
     border-radius: 50%;
+  }
+`
+
+const TAWrapper = styled.div`
+  width: 100%;
+  position: relative;
+  div {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+  }
+  textarea {
+    resize: none;
+    outline: none;
+    width: 100%;
   }
 `

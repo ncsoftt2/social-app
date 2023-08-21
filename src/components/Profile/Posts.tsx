@@ -1,26 +1,23 @@
-import React, {ChangeEvent, useRef} from 'react';
-import {addPostMessage, PostType} from "../../store/state";
+import React, {ChangeEvent, KeyboardEvent} from 'react';
 import {Button} from "../../StyledComponents/Button";
 import styled from "styled-components";
 import {Textarea} from "./Textarea";
+import {useAppDispatch, useAppSelector} from "../../store/hooks";
+import {addPostAC, updatePostMessageAC} from "../../store/profile-reducer/profile-reducer";
 
 const imgUrl = 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aHVtYW58ZW58MHx8MHx8fDA%3D&w=1000&q=80'
 
-
-interface PropsType {
-    posts: PostType[]
-    addPost: (newMessage: string) => void
-    postMessage: string
-    addPostMessage: (newMessage: string) => void
-}
-
-const Posts:React.FC<PropsType> = ({posts,addPost,postMessage,addPostMessage}) => {
+const Posts = () => {
+    const {posts,postMessage} = useAppSelector(({profileReducer}) => profileReducer)
+    const dispatch = useAppDispatch()
     const addNewPost = () => {
-        addPost(postMessage)
-        postMessage = ''
+        if(postMessage.trim().length !== 0) {
+            dispatch(addPostAC(postMessage))
+        }
     }
-
-    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => addPostMessage(e.currentTarget.value)
+    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        dispatch(updatePostMessageAC(e.currentTarget.value))
+    }
     const postElement = posts.map(({message,id,likesCount}) => {
         return (
             <li key={id}>
@@ -40,7 +37,7 @@ const Posts:React.FC<PropsType> = ({posts,addPost,postMessage,addPostMessage}) =
     return (
         <PostsWrapper>
             <TextareaAndButton>
-                <textarea value={postMessage} onChange={handleChange}/>
+                <textarea value={postMessage} onChange={handleChange} />
                 <Button onClick={addNewPost}>Отправить</Button>
             </TextareaAndButton>
             <ul>

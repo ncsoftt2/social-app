@@ -3,20 +3,18 @@ import ReactDOM from 'react-dom/client';
 import App from './components/App/App';
 import './styles/index.css';
 import {BrowserRouter} from "react-router-dom";
-import state, {StateType} from "./store/state";
 
+import store from "./store";
+import {Provider} from "react-redux";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement
 );
 
-
-export const renderTree = (state: StateType) => {
-    root.render(
+root.render(
+    <Provider store={store}>
         <BrowserRouter>
-            <App />
+            <App/>
         </BrowserRouter>
-    );
-}
-
-renderTree(state)
+    </Provider>
+);
