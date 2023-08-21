@@ -1,25 +1,27 @@
-import React, {useRef, useState} from 'react';
-import {PostType, ProfilePageType} from "../../store/state";
+import React, {ChangeEvent, useRef} from 'react';
+import {addPostMessage, PostType} from "../../store/state";
 import {Button} from "../../StyledComponents/Button";
 import styled from "styled-components";
-import {v1} from "uuid";
 import {Textarea} from "./Textarea";
 
 const imgUrl = 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aHVtYW58ZW58MHx8MHx8fDA%3D&w=1000&q=80'
 
-const Posts:React.FC<ProfilePageType> = ({posts}) => {
-    const [postValue,setPostValue] = useState<PostType[]>(posts)
-    const message = useRef<HTMLTextAreaElement>(null);
+
+interface PropsType {
+    posts: PostType[]
+    addPost: (newMessage: string) => void
+    postMessage: string
+    addPostMessage: (newMessage: string) => void
+}
+
+const Posts:React.FC<PropsType> = ({posts,addPost,postMessage,addPostMessage}) => {
     const addNewPost = () => {
-        if(message.current) {
-            if(message.current.textLength) {
-                let newPost: PostType = {id:v1(),message: message.current.value,likesCount: 0}
-                setPostValue([newPost,...postValue])
-                message.current.value = ''
-            }
-        }
+        addPost(postMessage)
+        postMessage = ''
     }
-    const postElement = postValue.map(({message,id,likesCount}) => {
+
+    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => addPostMessage(e.currentTarget.value)
+    const postElement = posts.map(({message,id,likesCount}) => {
         return (
             <li key={id}>
                 <PostHeader>
@@ -38,8 +40,8 @@ const Posts:React.FC<ProfilePageType> = ({posts}) => {
     return (
         <PostsWrapper>
             <TextareaAndButton>
-                <Textarea message={message}/>
-                <Button btnType={'primary'} borderRadius={'5px'} fontSize={'16px'} onClick={addNewPost}>Отправить</Button>
+                <textarea value={postMessage} onChange={handleChange}/>
+                <Button onClick={addNewPost}>Отправить</Button>
             </TextareaAndButton>
             <ul>
                 {postElement}

@@ -11,14 +11,14 @@ const image = 'https://cdn.theatlantic.com/media/img/photo/2018/10/images-of-the
 const Dialogs: React.FC<DialogsPageType> = ({dialogs,messages}) => {
     const dialogsItem = dialogs.map(({id,name}) =>   {
         return (
-            <NavLink to={`/dialogs/${id}`}
-                     className={({isActive}) => `${styles.link} ${isActive ? styles.active : null}`}
-            >
-                <DialogWrapper>
-                    <img src={image} alt={"avatar"}/>
-                    <span>{name}</span>
-                </DialogWrapper>
-            </NavLink>
+
+                <NavLink to={`/dialogs/${id}`}>
+                    <DialogWrapper>
+                        <img src={image} alt={"avatar"}/>
+                        <span>{name}</span>
+                    </DialogWrapper>
+                </NavLink>
+
         )
     })
     const dialogsMessages = messages.map(({id,message}) => {
@@ -64,6 +64,16 @@ const DialogsWrapper = styled.div`
     height: 100%;
     border-right: 1px solid rgba(0, 0, 0, 0.2);
   }
+
+  nav > a {
+    text-decoration: none;
+    color: black;
+  }
+
+  nav > a.active {
+    text-decoration: none;
+    color: #24a7ff;
+  }
 `
 const DialogWrapper = styled.div`
   display: flex;
@@ -71,7 +81,6 @@ const DialogWrapper = styled.div`
   gap: 15px;
   width: 200px;
   font-size: 18px;
-  color: #1e99e5;
   cursor: pointer;
   padding: 5px;
   background: #e7e7e7;
