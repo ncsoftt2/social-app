@@ -1,6 +1,12 @@
 import styled from "styled-components";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
-import {followAC, getUsersAC, unfollowAC} from "../../store/user-reducer/userReducer";
+import {
+    followAC,
+    getUsersAC,
+    setCurrentPageAC,
+    setTotalUsersAC,
+    unfollowAC
+} from "../../store/user-reducer/userReducer";
 import {useEffect} from "react";
 import axios from "axios";
 
@@ -8,7 +14,7 @@ import axios from "axios";
 const urlImg = 'https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png'
 
 const Users = () => {
-    const {users} = useAppSelector(({userReducer}) => userReducer)
+    const {users, totalUsers, pageSize,currentPage} = useAppSelector(({userReducer}) => userReducer)
     const dispatch = useAppDispatch();
     const toggleFollow = (userId: string) => {
         dispatch(followAC(userId))
@@ -16,10 +22,22 @@ const Users = () => {
     const toggleUnfollow = (userId: string) => {
         dispatch(unfollowAC(userId))
     }
+    const getUsers = () => {
+        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${pageSize}`)
+            .then(res => {
+                dispatch(getUsersAC(res.data.items))
+                dispatch(setTotalUsersAC(res.data.totalCount))
+            })
+    }
     useEffect(() => {
-        axios.get('https://social-network.samuraijs.com/api/1.0/users')
+        getUsers()
+    }, [currentPage])
+
+    const changePage = (pageNumber: number) => {
+        dispatch(setCurrentPageAC(pageNumber))
+        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${pageSize}`)
             .then(res => dispatch(getUsersAC(res.data.items)))
-    }, [])
+    }
     const elements = users.map(({id, name, followed, status, photos}) => {
         return (
             <UserItem key={id}>
@@ -36,10 +54,21 @@ const Users = () => {
             </UserItem>
         )
     })
+    const pagesCount = Math.ceil(totalUsers / pageSize)
+    const pages = []
+    for (let i = 1; i < pagesCount; i++) {
+        pages.push(i)
+    }
     return (
-        <UsersWrapper>
-            {elements}
-        </UsersWrapper>
+        <div>
+            <div>
+                {pages.map(el => <span key={el} onClick={() => changePage(el)}>{el}</span>).slice(0,50)}
+            </div>
+            <UsersWrapper>
+                {elements}
+            </UsersWrapper>
+        </div>
+
     )
 }
 export default Users
