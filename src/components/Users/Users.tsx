@@ -4,17 +4,20 @@ import {
     followAC,
     getUsersAC,
     setCurrentPageAC,
-    setTotalUsersAC,
+    setTotalUsersAC, toggleFetchingAC,
     unfollowAC
 } from "../../store/user-reducer/userReducer";
 import {useEffect} from "react";
 import axios from "axios";
+import {Spinner} from "../Spinner/Spinner";
+import {NavLink} from "react-router-dom";
+
 
 
 const urlImg = 'https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png'
 
 const Users = () => {
-    const {users, totalUsers, pageSize,currentPage} = useAppSelector(({userReducer}) => userReducer)
+    const {users, totalUsers, pageSize,currentPage,isFetching} = useAppSelector(({userReducer}) => userReducer)
     const dispatch = useAppDispatch();
     const toggleFollow = (userId: string) => {
         dispatch(followAC(userId))
@@ -23,29 +26,37 @@ const Users = () => {
         dispatch(unfollowAC(userId))
     }
     const getUsers = () => {
+        dispatch(toggleFetchingAC(true))
         axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${pageSize}`)
             .then(res => {
                 dispatch(getUsersAC(res.data.items))
                 dispatch(setTotalUsersAC(res.data.totalCount))
+                dispatch(toggleFetchingAC(false))
             })
     }
     useEffect(() => {
         getUsers()
     }, [currentPage])
-
     const changePage = (pageNumber: number) => {
+        dispatch(toggleFetchingAC(true))
         dispatch(setCurrentPageAC(pageNumber))
         axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${pageSize}`)
-            .then(res => dispatch(getUsersAC(res.data.items)))
+            .then(res => {
+                dispatch(getUsersAC(res.data.items))
+                dispatch(toggleFetchingAC(false))
+            })
     }
     const elements = users.map(({id, name, followed, status, photos}) => {
         return (
+
             <UserItem key={id}>
                 <div>
                     <img src={photos.small !== null ? photos.small : urlImg} alt={''}/>
                 </div>
+                <NavLink to={`/social-app/profile/${id}`}>
+                    <div>{name}</div>
+                </NavLink>
                 <span>{status}</span>
-                <div>{name}</div>
                 {
                     followed
                         ? <button onClick={() => toggleFollow(id)}>follow</button>
@@ -61,6 +72,7 @@ const Users = () => {
     }
     return (
         <div>
+            {isFetching ? <Spinner/> : null}
             <div>
                 {pages.map(el => <span key={el} onClick={() => changePage(el)}>{el}</span>).slice(0,50)}
             </div>
@@ -75,8 +87,8 @@ export default Users
 
 const UsersWrapper = styled.div`
   width: 975px;
-  border: 2px solid #8d2222;
   display: flex;
+  padding: 5px;
   flex-wrap: wrap;
 `
 

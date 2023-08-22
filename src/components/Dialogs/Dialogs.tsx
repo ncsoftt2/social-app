@@ -20,7 +20,7 @@ const Dialogs = () => {
     }
     const dialogsItem = dialogs.map(({id,name}) =>   {
         return (
-                <NavLink to={`/dialogs/${id}`} key={id}>
+                <NavLink to={`/social-app/dialogs/${id}`} key={id}>
                     <DialogWrapper>
                         <img src={image} alt={"avatar"}/>
                         <span>{name}</span>

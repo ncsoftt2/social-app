@@ -9,17 +9,17 @@ const Navbar = () => {
             <nav>
                 <ul>
                     <li className={styles.nav_item}>
-                        <NavLink to={'/profile'}
+                        <NavLink to={'/social-app/profile'}
                                  className={({isActive}) => `${styles.link} ${isActive ? styles.active : null}` }
                         >Profile</NavLink>
                     </li>
                     <li className={styles.nav_item}>
-                        <NavLink to={'/dialogs'}
+                        <NavLink to={'/social-app/dialogs'}
                                  className={({isActive}) => `${styles.link} ${isActive ? styles.active : null}` }
                         >Dialogs</NavLink>
                     </li>
                     <li className={styles.nav_item}>
-                        <NavLink to={'/users'}
+                        <NavLink to={'/social-app/users'}
                                  className={({isActive}) => `${styles.link} ${isActive ? styles.active : null}` }
                         >Users</NavLink>
                     </li>

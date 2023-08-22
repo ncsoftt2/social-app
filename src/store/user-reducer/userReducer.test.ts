@@ -11,7 +11,7 @@ test('followed false should be true',() => {
         ],
         pageSize: 5,
         totalUsers: 0,
-        currentPage:1
+        currentPage:1,isFetching:false
     }
     const action:FollowType = {
         type:"FOLLOW",
@@ -30,7 +30,7 @@ test('followed true should be false',() => {
         ],
         pageSize: 8,
         totalUsers: 0,
-        currentPage:1
+        currentPage:1,isFetching:false
     }
     const action:FollowType = {
         type:"FOLLOW",
@@ -48,7 +48,8 @@ test('set total users',() => {
         ],
         pageSize: 8,
         totalUsers: 0,
-        currentPage:1
+        currentPage:1,
+        isFetching: false
     }
     const action: SetTotalUsersType = {
         type:"SET-TOTAL-USERS",
@@ -66,7 +67,8 @@ test('set current page', () => {
         ],
         pageSize: 8,
         totalUsers: 0,
-        currentPage:1
+        currentPage:1,
+        isFetching:false
     }
     const action: SetCurrentPageType = {
         type:"SET-CURRENT-PAGE",

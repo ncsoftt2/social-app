@@ -15,9 +15,10 @@ const App = () => {
             <ContentWrapper>
                 <Navbar/>
                 <Routes>
-                    <Route path={'/profile'} element={<Profile />}/>
-                    <Route path={'/dialogs/*'} element={<Dialogs />}/>
-                    <Route path={'/users'} element={<Users />} />
+                    <Route path={'/social-app/profile/*'} element={<Profile />}/>
+                    <Route path={'/*'} element={<div>444</div>}/>
+                    <Route path={'/social-app/dialogs/*'} element={<Dialogs />}/>
+                    <Route path={'/social-app/users'} element={<Users />} />
                 </Routes>
             </ContentWrapper>
         </AppWrapper>

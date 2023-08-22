@@ -2,6 +2,7 @@ import {combineReducers, compose, createStore} from "redux";
 import profileReducer from "./profile-reducer/profile-reducer";
 import dialogsReducer from "./dialogs-reducer/dialogs-reducer";
 import userReducer from "./user-reducer/userReducer";
+import authReducer from "./auth-reducer/auth-reducer";
 
 declare global {
     interface Window {
@@ -16,6 +17,7 @@ const store = createStore(
             profileReducer,
             dialogsReducer,
             userReducer,
+            authReducer
         }
     )
     , composeEnhancers()
