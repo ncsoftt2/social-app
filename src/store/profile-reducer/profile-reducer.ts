@@ -1,6 +1,6 @@
 import {v1} from "uuid";
 import {profileAPI} from "../../api/profileAPI";
-import { ThunkAction } from 'redux-thunk'
+import {ThunkAction} from 'redux-thunk'
 import {RootState} from "../index";
 
 interface PostType {
@@ -79,10 +79,10 @@ const profileReducer = (state = initialState, action: ActionType) => {
                 postMessage: action.postMessage
             }
         case "GET-PROFILE":
-                return {
-                    ...state,
-                    profile: action.profile
-                }
+            return {
+                ...state,
+                profile: action.profile
+            }
         default:
             return state
     }
@@ -96,11 +96,11 @@ export const updatePostMessageAC = (postMessage: string): UpdatePostMessage => (
     type: "UPDATE-POST-MESSAGE",
     postMessage
 })
-export const getProfileAC = (profile: ProfileType): GetProfileType => ({type:"GET-PROFILE",profile})
+export const getProfileAC = (profile: ProfileType): GetProfileType => ({type: "GET-PROFILE", profile})
 
-export type ThunkType = ThunkAction<void,RootState,unknown,ActionType>
+export type ThunkType = ThunkAction<void, RootState, unknown, ActionType>
 
-export const getProfileThunk = (userId:number):ThunkType => {
+export const getProfileThunk = (userId: number): ThunkType => {
     return async (dispatch) => {
         const data = await profileAPI.getProfile(userId)
         dispatch(getProfileAC(data))

@@ -1,14 +1,13 @@
 import styled from "styled-components";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {
-    followAC, getUsersAC, getUsersThunk, setCurrentPageAC, toggleFetchingAC,
-    toggleIsFollowingProgress, unfollowAC
+    followAC, followThunk,
+    getUsersThunk,
+    toggleIsFollowingProgress, unfollowThunk
 } from "../../store/user-reducer/userReducer";
 import {useEffect} from "react";
-
 import {Spinner} from "../Spinner/Spinner";
 import {NavLink} from "react-router-dom";
-import {usersAPI} from "../../api/usersAPI";
 
 const urlImg = 'https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png'
 
@@ -17,39 +16,23 @@ const Users = () => {
     } = useAppSelector(({userReducer}) => userReducer)
     const dispatch = useAppDispatch();
     const toggleFollow = (userId: number) => {
-        dispatch(toggleIsFollowingProgress(true,userId))
-        usersAPI.followAPI(userId)
-            .then(res => {
-                if (res.resultCode === 0) {
-                    dispatch(followAC(userId))
-                }
-                dispatch(toggleIsFollowingProgress(false,userId))
-            })
+        // @ts-ignore
+        dispatch(followThunk(userId))
     }
     const toggleUnfollow = (userId: number) => {
-        dispatch(toggleIsFollowingProgress(true,userId))
-        usersAPI.unfollowAPI(userId)
-            .then(res => {
-                if (res.resultCode === 0) {
-                    dispatch(unfollowAC(userId))
-                }
-                dispatch(toggleIsFollowingProgress(false,userId))
-            })
+        // @ts-ignore
+        dispatch(unfollowThunk(userId))
     }
     const getUsers = () => {
+        // @ts-ignore
         dispatch(getUsersThunk(currentPage,pageSize))
     }
     useEffect(() => {
         getUsers()
     }, [currentPage])
     const changePage = (pageNumber: number) => {
-        dispatch(toggleFetchingAC(true))
-        dispatch(setCurrentPageAC(pageNumber))
-        usersAPI.getUsersAPI(currentPage, pageSize)
-            .then(res => {
-                dispatch(getUsersAC(res.items))
-                dispatch(toggleFetchingAC(false))
-            })
+        // @ts-ignore
+        dispatch(getUsersThunk(pageNumber,pageSize))
     }
     const elements = users.map(({id, name, followed, status, photos}) => {
         const disableBtn = followingProgress.some(fId => fId === id)

@@ -17,6 +17,7 @@ const ProfileInfo = () => {
         if (!userId) {
             userId = 26020
         }
+        // @ts-ignore
         dispatch(getProfileThunk(userId))
     }
     useEffect(() => {

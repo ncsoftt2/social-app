@@ -10,18 +10,15 @@ declare global {
         __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
     }
 }
-
+// @ts-ignore
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-
-
 const reducers = combineReducers({
     profileReducer,
     dialogsReducer,
     userReducer,
     authReducer
 })
-
 const store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddleware)))
 export default store
-export type RootState = ReturnType<typeof store.getState>
+export type RootState = ReturnType<typeof reducers>
 export type AppDispatch = typeof store.dispatch
