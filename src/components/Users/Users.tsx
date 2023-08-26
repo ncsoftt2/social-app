@@ -1,38 +1,43 @@
 import styled from "styled-components";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {
-    followAC,
-    getUsersAC,
-    setCurrentPageAC,
-    setTotalUsersAC, toggleFetchingAC,
-    unfollowAC
+    followAC, getUsersAC, getUsersThunk, setCurrentPageAC, toggleFetchingAC,
+    toggleIsFollowingProgress, unfollowAC
 } from "../../store/user-reducer/userReducer";
 import {useEffect} from "react";
-import axios from "axios";
+
 import {Spinner} from "../Spinner/Spinner";
 import {NavLink} from "react-router-dom";
-
-
+import {usersAPI} from "../../api/usersAPI";
 
 const urlImg = 'https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png'
 
 const Users = () => {
-    const {users, totalUsers, pageSize,currentPage,isFetching} = useAppSelector(({userReducer}) => userReducer)
+    const {users, totalUsers, pageSize, currentPage, isFetching,followingProgress
+    } = useAppSelector(({userReducer}) => userReducer)
     const dispatch = useAppDispatch();
-    const toggleFollow = (userId: string) => {
-        dispatch(followAC(userId))
+    const toggleFollow = (userId: number) => {
+        dispatch(toggleIsFollowingProgress(true,userId))
+        usersAPI.followAPI(userId)
+            .then(res => {
+                if (res.resultCode === 0) {
+                    dispatch(followAC(userId))
+                }
+                dispatch(toggleIsFollowingProgress(false,userId))
+            })
     }
-    const toggleUnfollow = (userId: string) => {
-        dispatch(unfollowAC(userId))
+    const toggleUnfollow = (userId: number) => {
+        dispatch(toggleIsFollowingProgress(true,userId))
+        usersAPI.unfollowAPI(userId)
+            .then(res => {
+                if (res.resultCode === 0) {
+                    dispatch(unfollowAC(userId))
+                }
+                dispatch(toggleIsFollowingProgress(false,userId))
+            })
     }
     const getUsers = () => {
-        dispatch(toggleFetchingAC(true))
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${pageSize}`)
-            .then(res => {
-                dispatch(getUsersAC(res.data.items))
-                dispatch(setTotalUsersAC(res.data.totalCount))
-                dispatch(toggleFetchingAC(false))
-            })
+        dispatch(getUsersThunk(currentPage,pageSize))
     }
     useEffect(() => {
         getUsers()
@@ -40,15 +45,15 @@ const Users = () => {
     const changePage = (pageNumber: number) => {
         dispatch(toggleFetchingAC(true))
         dispatch(setCurrentPageAC(pageNumber))
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${pageSize}`)
+        usersAPI.getUsersAPI(currentPage, pageSize)
             .then(res => {
-                dispatch(getUsersAC(res.data.items))
+                dispatch(getUsersAC(res.items))
                 dispatch(toggleFetchingAC(false))
             })
     }
     const elements = users.map(({id, name, followed, status, photos}) => {
+        const disableBtn = followingProgress.some(fId => fId === id)
         return (
-
             <UserItem key={id}>
                 <div>
                     <img src={photos.small !== null ? photos.small : urlImg} alt={''}/>
@@ -59,8 +64,10 @@ const Users = () => {
                 <span>{status}</span>
                 {
                     followed
-                        ? <button onClick={() => toggleFollow(id)}>follow</button>
-                        : <button onClick={() => toggleUnfollow(id)}>unfollow</button>
+                        ? <button disabled={disableBtn}
+                                  onClick={() => toggleUnfollow(id)}>unfollow</button>
+                        : <button disabled={disableBtn}
+                                  onClick={() => toggleFollow(id)}>follow</button>
                 }
             </UserItem>
         )
@@ -74,7 +81,7 @@ const Users = () => {
         <div>
             {isFetching ? <Spinner/> : null}
             <div>
-                {pages.map(el => <span key={el} onClick={() => changePage(el)}>{el}</span>).slice(0,50)}
+                {pages.map(el => <span key={el} onClick={() => changePage(el)}>{el}</span>).slice(0, 50)}
             </div>
             <UsersWrapper>
                 {elements}
@@ -101,14 +108,14 @@ const UserItem = styled.div`
   height: 180px;
   text-align: center;
 
-  button {
-    margin-top: 7px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    background-color: #66a209;
-    padding: 9px 20px;
-  }
+  //button {
+  //  margin-top: 7px;
+  //  border: none;
+  //  border-radius: 5px;
+  //  color: white;
+  //  background-color: #66a209;
+  //  padding: 9px 20px;
+  //}
 
   img {
     width: 60px;

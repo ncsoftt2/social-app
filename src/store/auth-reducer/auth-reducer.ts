@@ -19,7 +19,7 @@ const initialState:AuthType = {
     isAuth: false
 }
 
-export type SetUserDataType = {
+type SetUserDataType = {
     type:"SET-USER-DATA",
     data: DataType
 }

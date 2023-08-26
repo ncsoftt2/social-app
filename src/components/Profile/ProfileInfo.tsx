@@ -1,10 +1,8 @@
 import React, {useEffect} from 'react';
 import {useParams} from "react-router-dom";
-import axios from "axios";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
-import {getProfileAC} from "../../store/profile-reducer/profile-reducer";
+import {getProfileThunk} from "../../store/profile-reducer/profile-reducer";
 import styled from "styled-components";
-
 
 const urlImg = 'https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png'
 
@@ -19,8 +17,7 @@ const ProfileInfo = () => {
         if (!userId) {
             userId = 26020
         }
-        axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${userId}`)
-            .then(res => dispatch(getProfileAC(res.data)))
+        dispatch(getProfileThunk(userId))
     }
     useEffect(() => {
         getProfile()

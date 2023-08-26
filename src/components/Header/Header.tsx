@@ -4,25 +4,22 @@ import {NavLink} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {setUserDataAC} from "../../store/auth-reducer/auth-reducer";
 import axios from "axios";
+import {authAPI} from "../../api/authAPI";
 const Header = () => {
     const {data,isAuth} = useAppSelector(({authReducer}) => authReducer)
     const dispatch = useAppDispatch()
-    useEffect(() => {
-        axios.get(`https://social-network.samuraijs.com/api/1.0/auth/me`,{
-            withCredentials: true,
-            headers: {
-                "API-KEY": "974e9f2b-a26c-4888-891b-d2b3c8dd1403"
-            }
-        })
+    const authMe = () => {
+        authAPI.authMe()
             .then(res => {
-                if(res.data.resultCode === 0) {
-                    const {email,id,login} = res.data.data
+                if(res.resultCode === 0) {
+                    const {email,id,login} = res.data
                     dispatch(setUserDataAC(email,id,login))
-                    console.log(res.data)
                 }
             })
+    }
+    useEffect(() => {
+        authMe()
     },[])
-    console.log(data)
     return (
         <header className={styles.header}>
             <h2 className={styles.logo}>
