@@ -4,6 +4,7 @@ import App from "../components/App/App";
 import Profile from "../components/Profile/Profile";
 import Dialogs from "../components/Dialogs/Dialogs";
 import Users from "../components/Users/Users";
+import {Login} from "../components/Login/Login";
 
 export const routes = createBrowserRouter([
     {
@@ -23,6 +24,10 @@ export const routes = createBrowserRouter([
                 path: '/social-app/users',
                 element: <Users/>
             },
+            {
+                path: "/social-app//login",
+                element: <Login />
+            }
         ]
     }
 ])

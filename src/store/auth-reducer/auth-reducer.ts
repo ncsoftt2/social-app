@@ -1,3 +1,6 @@
+import {authAPI} from "../../api/authAPI";
+import {ThunkAction} from "redux-thunk";
+import {RootState} from "../index";
 
 interface DataType {
     id: number | null
@@ -45,3 +48,15 @@ export const setUserDataAC = (email:string,id:number,login:string):SetUserDataTy
     type:"SET-USER-DATA",
     data: {email,id,login}
 })
+
+type ThunkType = ThunkAction<void, RootState, unknown, ActionType>
+
+export const authThunk = ():ThunkType => async (dispatch) => {
+    return authAPI.authMe()
+        .then(res => {
+            if(res.resultCode === 0) {
+                const {email,id,login} = res.data
+                dispatch(setUserDataAC(email,id,login))
+            }
+        })
+}

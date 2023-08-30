@@ -37,6 +37,7 @@ export interface ProfileStateType {
     postMessage: string
     posts: PostType[]
     profile: ProfileType
+    status: string
 }
 
 const initialState: ProfileStateType = {
@@ -46,7 +47,8 @@ const initialState: ProfileStateType = {
         {id: v1(), message: 'second post', likesCount: 5},
         {id: v1(), message: 'third post', likesCount: 24},
     ],
-    profile: {} as ProfileType
+    profile: {} as ProfileType,
+    status: ''
 }
 
 export type AddPostType = {
@@ -61,8 +63,11 @@ export type GetProfileType = {
     type: "GET-PROFILE"
     profile: ProfileType
 }
-
-export type ActionType = AddPostType | UpdatePostMessage | GetProfileType
+export type GetStatus = {
+    type: "GET-STATUS",
+    status: string
+}
+export type ActionType = AddPostType | UpdatePostMessage | GetProfileType | GetStatus
 
 const profileReducer = (state = initialState, action: ActionType) => {
     switch (action.type) {
@@ -83,6 +88,11 @@ const profileReducer = (state = initialState, action: ActionType) => {
                 ...state,
                 profile: action.profile
             }
+        case "GET-STATUS":
+            return {
+                ...state,
+                status: action.status
+            }
         default:
             return state
     }
@@ -97,12 +107,29 @@ export const updatePostMessageAC = (postMessage: string): UpdatePostMessage => (
     postMessage
 })
 export const getProfileAC = (profile: ProfileType): GetProfileType => ({type: "GET-PROFILE", profile})
+const getStatus = (status: string):GetStatus => ({type:"GET-STATUS",status})
 
-export type ThunkType = ThunkAction<void, RootState, unknown, ActionType>
+type ThunkType = ThunkAction<void, RootState, unknown, ActionType>
 
 export const getProfileThunk = (userId: number): ThunkType => {
     return async (dispatch) => {
         const data = await profileAPI.getProfile(userId)
         dispatch(getProfileAC(data))
+    }
+}
+export const getStatusThunk = (userId:number):ThunkType => {
+    return async (dispatch) => {
+        const data = await profileAPI.getStatusApi(userId)
+        dispatch(getStatus(data))
+    }
+}
+export const updateStatusThunk = (status:string):ThunkType => {
+    return async (dispatch) => {
+        profileAPI.updateStatusApi(status)
+            .then(res => {
+                if(res.data.resultCode === 0) {
+                    dispatch(getStatus(status))
+                }
+            })
     }
 }

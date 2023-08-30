@@ -10,7 +10,8 @@ test('add new post', () => {
             {id:v1(),message: 'second post', likesCount: 5},
             {id:v1(),message: 'third post', likesCount: 24},
         ],
-        profile: {} as ProfileType
+        profile: {} as ProfileType,
+        status: ''
     }
     const newMessage = 'new message'
     const action: AddPostType = {
@@ -30,7 +31,8 @@ test('update post message',() => {
             {id:v1(),message: 'second post', likesCount: 5},
             {id:v1(),message: 'third post', likesCount: 24},
         ],
-        profile: {} as ProfileType
+        profile: {} as ProfileType,
+        status: ''
     }
     const newMessage = 'new post message'
     const action: UpdatePostMessage = {
