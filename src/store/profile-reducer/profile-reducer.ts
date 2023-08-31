@@ -1,7 +1,8 @@
 import {v1} from "uuid";
 import {profileAPI} from "../../api/profileAPI";
 import {ThunkAction} from 'redux-thunk'
-import {RootState} from "../index";
+import { RootState, ThunkType} from "../index";
+import {Dispatch} from "redux";
 
 interface PostType {
     id: string | null
@@ -67,9 +68,9 @@ export type GetStatus = {
     type: "GET-STATUS",
     status: string
 }
-export type ActionType = AddPostType | UpdatePostMessage | GetProfileType | GetStatus
+export type ProfileAction = AddPostType | UpdatePostMessage | GetProfileType | GetStatus
 
-const profileReducer = (state = initialState, action: ActionType) => {
+const profileReducer = (state = initialState, action: ProfileAction) => {
     switch (action.type) {
         case "ADD-POST":
             const newPost: PostType = {id: v1(), message: state.postMessage, likesCount: 0}
@@ -109,15 +110,13 @@ export const updatePostMessageAC = (postMessage: string): UpdatePostMessage => (
 export const getProfileAC = (profile: ProfileType): GetProfileType => ({type: "GET-PROFILE", profile})
 const getStatus = (status: string):GetStatus => ({type:"GET-STATUS",status})
 
-type ThunkType = ThunkAction<void, RootState, unknown, ActionType>
-
-export const getProfileThunk = (userId: number): ThunkType => {
-    return async (dispatch) => {
+export const getProfileThunk = (userId: number):ThunkType => {
+    return async (dispatch: Dispatch<ProfileAction>) => {
         const data = await profileAPI.getProfile(userId)
         dispatch(getProfileAC(data))
     }
 }
-export const getStatusThunk = (userId:number):ThunkType => {
+export const getStatusThunk = (userId:number): ThunkAction<void, RootState, unknown, ProfileAction> => {
     return async (dispatch) => {
         const data = await profileAPI.getStatusApi(userId)
         dispatch(getStatus(data))

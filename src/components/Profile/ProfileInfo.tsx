@@ -4,6 +4,7 @@ import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {getProfileThunk, getStatusThunk} from "../../store/profile-reducer/profile-reducer";
 import styled from "styled-components";
 import {ProfileStatus} from "./ProfileStatus";
+import {Box, Grid, ImageListItem} from "@mui/material";
 
 const urlImg = 'https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png'
 
@@ -16,13 +17,13 @@ const ProfileInfo = () => {
     const navigate = useNavigate()
     const getProfile = () => {
         let userId = paramId
-        if (!userId && data.id !== null) {
+        if (!userId && data.id ) {
             userId = data.id
         }
-        // @ts-ignore
-        dispatch(getProfileThunk(userId))
-        // @ts-ignore
-        dispatch(getStatusThunk(userId))
+        if(typeof userId === 'number') {
+            dispatch(getProfileThunk(userId))
+            dispatch(getStatusThunk(userId))
+        }
     }
     useEffect(() => {
         getProfile()
@@ -30,34 +31,28 @@ const ProfileInfo = () => {
     if(!isAuth) navigate('/social-app/login')
 
     return (
-        <ProfileInfoWrapper>
-            <ProfileStatus status={status}/>
-            <div>full name:{profile.fullName}</div>
-            <div>
-                <img src={profile.photos && profile.photos.large !== null ? profile.photos.large : urlImg}
-                     alt={'img'}/>
-            </div>
-            <div>about me:{profile.aboutMe}</div>
-            <div>looking for a job: {profile.lookingForAJob ? "yes" : "no"}</div>
-            <div>{profile.lookingForAJob && profile.lookingForAJobDescription}</div>
-        </ProfileInfoWrapper>
-
+        <Grid container>
+            <Grid item xs={3}>
+                <ImageListItem sx={{width: '200px', height: '200px'}}>
+                    <img
+                        src={profile.photos && profile.photos.large !== null ? profile.photos.large : urlImg}
+                        alt={'img'}
+                        loading="lazy"
+                    />
+                </ImageListItem>
+            </Grid>
+            <Grid item xs={9} sx={{mt:1}}>
+                <Grid container sx={{alignItems:'center',mb:1}}>
+                    <Box sx={{mr:1}}>Статус:</Box>
+                    <ProfileStatus status={status}/>
+                </Grid>
+                <Box sx={{mb:1}}>Имя: {profile.fullName}</Box>
+                <Box sx={{mb:1}}>Обо мне: {profile.aboutMe}</Box>
+                <Box sx={{mb:1}}>Ищу работу: {profile.lookingForAJob ? "да" : 'нет'}</Box>
+                <Box sx={{mb:1}}>{profile.lookingForAJob && profile.lookingForAJobDescription}</Box>
+            </Grid>
+        </Grid>
     );
 };
 
 export default ProfileInfo;
-
-
-const ProfileInfoWrapper = styled.div`
-  border: 2px solid black;
-  text-align: center;
-  border-radius: 5px;
-  div {
-    margin: 10px 0;
-  }
-  img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-  }
-`

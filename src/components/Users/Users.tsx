@@ -8,51 +8,62 @@ import {
 import {useEffect} from "react";
 import {Spinner} from "../Spinner/Spinner";
 import {NavLink} from "react-router-dom";
+import {Box, Button, Grid, ImageListItem} from "@mui/material";
 
 const urlImg = 'https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png'
 
 const Users = () => {
-    const {users, totalUsers, pageSize, currentPage, isFetching,followingProgress
+    const {
+        users, totalUsers, pageSize, currentPage, isFetching, followingProgress
     } = useAppSelector(({userReducer}) => userReducer)
     const dispatch = useAppDispatch();
     const toggleFollow = (userId: number) => {
-        // @ts-ignore
         dispatch(followThunk(userId))
     }
     const toggleUnfollow = (userId: number) => {
-        // @ts-ignore
         dispatch(unfollowThunk(userId))
     }
     const getUsers = () => {
-        // @ts-ignore
-        dispatch(getUsersThunk(currentPage,pageSize))
+        dispatch(getUsersThunk(currentPage, pageSize))
     }
     useEffect(() => {
         getUsers()
     }, [currentPage])
     const changePage = (pageNumber: number) => {
-        // @ts-ignore
-        dispatch(getUsersThunk(pageNumber,pageSize))
+        dispatch(getUsersThunk(pageNumber, pageSize))
     }
     const elements = users.map(({id, name, followed, status, photos}) => {
         const disableBtn = followingProgress.some(fId => fId === id)
         return (
-            <UserItem key={id}>
-                <div>
-                    <img src={photos.small !== null ? photos.small : urlImg} alt={''}/>
-                </div>
-                <NavLink to={`/social-app/profile/${id}`}>
-                    <div>{name}</div>
+            <Grid item key={id} xs={3} sx={{textAlign: 'center', p: 2}}>
+                <ImageListItem key={id} sx={{width: '100px', height: '100px', margin: '0 auto'}}>
+                    <img
+                        src={photos.small !== null ? photos.small : urlImg}
+                        alt={name ? name : ''}
+                        loading="lazy"
+                    />
+                </ImageListItem>
+                <NavLink to={`/social-app/profile/${id}`} style={{textDecoration: 'none', color: 'inherit'}}>
+                    <Box>{name}</Box>
                 </NavLink>
-                <span>{status}</span>
                 {
                     followed
-                        ? <button disabled={disableBtn}
-                                  onClick={() => toggleUnfollow(id)}>unfollow</button>
-                        : <button disabled={disableBtn}
-                                  onClick={() => toggleFollow(id)}>follow</button>
+                        ? <Button disabled={disableBtn}
+                                  onClick={() => toggleUnfollow(id)}
+                                  variant="contained"
+                                  disableElevation
+                                  color="error"
+                                  sx={{color:'white',fontSize:'10px',p:'5px 10px'}}
+                        >unfollow</Button>
+                        : <Button disabled={disableBtn}
+                                  disableElevation
+                                  color="success"
+                                  variant="contained"
+                                  sx={{color:'white',fontSize:'10px',p:'5px 10px'}}
+                                  onClick={() => toggleFollow(id)}
+                        >follow</Button>
                 }
-            </UserItem>
+            </Grid>
         )
     })
     const pagesCount = Math.ceil(totalUsers / pageSize)
@@ -61,15 +72,15 @@ const Users = () => {
         pages.push(i)
     }
     return (
-        <div>
+        <>
             {isFetching ? <Spinner/> : null}
-            <div>
+            <Box>
                 {pages.map(el => <span key={el} onClick={() => changePage(el)}>{el}</span>).slice(0, 50)}
-            </div>
-            <UsersWrapper>
+            </Box>
+            <Grid container sx={{mt:'10px'}}>
                 {elements}
-            </UsersWrapper>
-        </div>
+            </Grid>
+        </>
 
     )
 }

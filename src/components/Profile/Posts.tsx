@@ -4,110 +4,61 @@ import styled from "styled-components";
 import {Textarea} from "./Textarea";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {addPostAC, updatePostMessageAC} from "../../store/profile-reducer/profile-reducer";
+import {Box, Container, Grid, ImageListItem, List, ListItem, TextareaAutosize, TextField} from "@mui/material";
 
 const imgUrl = 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aHVtYW58ZW58MHx8MHx8fDA%3D&w=1000&q=80'
 
 const Posts = () => {
-    const {posts,postMessage} = useAppSelector(({profileReducer}) => profileReducer)
+    const {posts, postMessage} = useAppSelector(({profileReducer}) => profileReducer)
     const dispatch = useAppDispatch()
     const addNewPost = () => {
-        if(postMessage.trim().length !== 0) {
+        if (postMessage.trim().length !== 0) {
             dispatch(addPostAC(postMessage))
         }
     }
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         dispatch(updatePostMessageAC(e.currentTarget.value))
     }
-    const postElement = posts.map(({message,id,likesCount}) => {
+    const postElement = posts.map(({message, id, likesCount}) => {
         return (
-            <li key={id}>
-                <PostHeader>
-                    <img src={imgUrl} alt={'img'}/>
+            <ListItem key={id} disablePadding sx={{display: 'block', width: '100%'}}>
+                <Box sx={{display: 'flex', alignItems: 'center'}}>
+                    <ImageListItem sx={{width: '50px', height: '50px', borderRadius: '50'}}>
+                        <img
+                            src={imgUrl}
+                            alt={'img'}
+                            loading="lazy"
+                        />
+                    </ImageListItem>
                     <h2>username</h2>
-                </PostHeader>
-                <PostDescr>{message}</PostDescr>
-                <PostStatistic>
+                </Box>
+                <Box>{message}</Box>
+                <Box>
                     <span>&hearts;</span>
                     <span>{likesCount}</span>
-                </PostStatistic>
+                </Box>
 
-            </li>
+            </ListItem>
         )
     })
     return (
-        <PostsWrapper>
-            <TextareaAndButton>
-                <textarea value={postMessage} onChange={handleChange} />
+        <Container>
+            <Box sx={{m:3}}>
+                <TextField
+                    id="outlined-multiline-flexible"
+                    sx={{width: "600px"}}
+                    value={postMessage}
+                    onChange={handleChange}
+                    multiline
+                />
                 <Button onClick={addNewPost}>Отправить</Button>
-            </TextareaAndButton>
-            <ul>
+            </Box>
+
+            <List sx={{p: 0}}>
                 {postElement}
-            </ul>
-        </PostsWrapper>
+            </List>
+        </Container>
     );
 };
 
 export default Posts;
-
-
-const PostsWrapper = styled.section`
-  li {
-    margin: 20px 0;
-  }
-  textarea {
-    display:block;
-    border: 1px solid rgba(0, 0, 0, 0.16);
-    border-radius: 5px;
-    width: 300px;
-    height: 80px;
-    overflow: auto;
-    resize: none;
-    font-size: 16px;
-    font-family: 'Montserrat', sans-serif;
-    padding: 5px;
-    outline: none;
-  }
-`
-const PostHeader = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-  }
-  h2 {
-    font-size: 18px;
-    font-weight: 300;
-  }
-`
-
-const PostDescr = styled.div`
-  width: 500px;
-  font-size: 14px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 5px;
-  margin: 10px 0;
-  padding: 5px;
-`
-const PostStatistic = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  span {
-    font-size: 18px;
-    color: red;
-  }
-  span:last-child {
-    font-size: 16px;
-    color: black;
-  }
-`
-
-
-const TextareaAndButton = styled.div`
-  button {
-    margin-top: 5px;
-  }
-`

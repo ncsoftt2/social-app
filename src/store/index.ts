@@ -1,10 +1,11 @@
-import {applyMiddleware, combineReducers, compose, createStore} from "redux";
-import profileReducer from "./profile-reducer/profile-reducer";
-import dialogsReducer from "./dialogs-reducer/dialogs-reducer";
-import userReducer from "./user-reducer/userReducer";
-import authReducer from "./auth-reducer/auth-reducer";
-import thunkMiddleware from 'redux-thunk'
-import {appReducer} from "./app-reducer/app-reducer";
+import {applyMiddleware, combineReducers, compose, createStore, Dispatch, legacy_createStore} from "redux";
+import profileReducer, {ProfileAction} from "./profile-reducer/profile-reducer";
+import dialogsReducer, {DialogsActionType} from "./dialogs-reducer/dialogs-reducer";
+import userReducer, {UsersAction} from "./user-reducer/userReducer";
+import authReducer, {AuthActionType} from "./auth-reducer/auth-reducer";
+import thunk, {ThunkAction, ThunkDispatch} from "redux-thunk"
+
+import {AppActionType, appReducer} from "./app-reducer/app-reducer";
 
 declare global {
     interface Window {
@@ -19,7 +20,10 @@ const reducers = combineReducers({
     authReducer,
     appReducer
 })
-const store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddleware)))
+const store = legacy_createStore(reducers,applyMiddleware(thunk))
 export default store
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+
+type Actions = ProfileAction | DialogsActionType | AuthActionType | UsersAction | AppActionType
+export type RootState = ReturnType<typeof reducers>
+export type AppDispatch = ThunkDispatch<RootState, unknown, Actions>
+export type ThunkType = ThunkAction<void, RootState, unknown, Actions>

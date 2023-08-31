@@ -35,8 +35,8 @@ export type UpdateDialogBodyMessage = {
     type: "UPDATE-DIALOG-BODY-MESSAGE"
     dialogMessage: string
 }
-type ActionType = AddNewMessage | UpdateDialogBodyMessage
-const dialogsReducer = (state = initialState, action: ActionType) => {
+export type DialogsActionType = AddNewMessage | UpdateDialogBodyMessage
+const dialogsReducer = (state = initialState, action: DialogsActionType) => {
     switch (action.type) {
         case "ADD-NEW-MESSAGE":
             const newMessage:MessagesType = {id: v1(),message: state.dialogMessage}

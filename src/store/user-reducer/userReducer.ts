@@ -1,4 +1,4 @@
-import {RootState} from "../index";
+import {RootState, ThunkType} from "../index";
 import {usersAPI} from "../../api/usersAPI";
 import {ThunkAction} from "redux-thunk";
 
@@ -23,7 +23,7 @@ export type UserStateType = {
 
 const initialState: UserStateType = {
     users: [],
-    pageSize: 8,
+    pageSize: 12,
     totalUsers: 0,
     currentPage: 1,
     isFetching: false,
@@ -60,13 +60,13 @@ export type ToggleIsFollowingProgress = {
     userId: number
 }
 
-type ActionsTypes = GetUsersType | FollowType | UnFollowType |
+export type UsersAction = GetUsersType | FollowType | UnFollowType |
     SetTotalUsersType | SetCurrentPageType |
     SetIsFetchingType | ToggleIsFollowingProgress
 
 type InitialState = typeof initialState
 
-const userReducer = (state = initialState, action: ActionsTypes):InitialState => {
+const userReducer = (state = initialState, action: UsersAction):InitialState => {
     switch (action.type) {
         case "GET-USERS":
             return {
@@ -131,7 +131,6 @@ const toggleFetchingAC = (isFetching: boolean): SetIsFetchingType => ({type: "TO
 export const toggleIsFollowingProgress = (isFetchingProgress: boolean,userId:number): ToggleIsFollowingProgress =>
     ({type: "TOGGLE-IS-FOLLOWING-PROGRESS",userId,isFetchingProgress})
 
-type ThunkType = ThunkAction<Promise<void>,RootState,unknown,ActionsTypes>
 
 export const getUsersThunk = (currentPage:number,pageSize:number):ThunkType => {
     return async(dispatch) => {

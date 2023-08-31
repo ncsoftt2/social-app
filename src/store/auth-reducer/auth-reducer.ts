@@ -1,6 +1,6 @@
 import {authAPI} from "../../api/authAPI";
 import {ThunkAction} from "redux-thunk";
-import {RootState} from "../index";
+import {RootState, ThunkType} from "../index";
 
 interface DataType {
     id: number | null
@@ -27,10 +27,10 @@ type SetUserDataType = {
     data: DataType
 }
 
-export type ActionType = SetUserDataType
+export type AuthActionType = SetUserDataType
 type InitialState = typeof initialState
 
-const authReducer = (state = initialState, action: ActionType):InitialState => {
+const authReducer = (state = initialState, action: AuthActionType):InitialState => {
     switch (action.type) {
         case "SET-USER-DATA":
             return {
@@ -49,7 +49,6 @@ export const setUserDataAC = (email:string,id:number,login:string):SetUserDataTy
     data: {email,id,login}
 })
 
-type ThunkType = ThunkAction<void, RootState, unknown, ActionType>
 
 export const authThunk = ():ThunkType => async (dispatch) => {
     return authAPI.authMe()
