@@ -5,6 +5,7 @@ import Profile from "../components/Profile/Profile";
 import Dialogs from "../components/Dialogs/Dialogs";
 import Users from "../components/Users/Users";
 import {Login} from "../components/Login/Login";
+import {ProtectedRoute} from "../components/ProtectedRoute/ProtectedRoute";
 
 export const routes = createBrowserRouter([
     {
@@ -14,7 +15,11 @@ export const routes = createBrowserRouter([
         children: [
             {
                 path: '/social-app/profile/*',
-                element: <Profile/>
+                element: (
+                    <ProtectedRoute>
+                        <Profile/>
+                    </ProtectedRoute>
+                )
             },
             {
                 path: '/social-app/dialogs/*',

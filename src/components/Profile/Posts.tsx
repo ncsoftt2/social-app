@@ -1,10 +1,8 @@
-import React, {ChangeEvent, KeyboardEvent} from 'react';
+import React, {ChangeEvent} from 'react';
 import {Button} from "../../StyledComponents/Button";
-import styled from "styled-components";
-import {Textarea} from "./Textarea";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {addPostAC, updatePostMessageAC} from "../../store/profile-reducer/profile-reducer";
-import {Box, Container, Grid, ImageListItem, List, ListItem, TextareaAutosize, TextField} from "@mui/material";
+import {Box, Container, ImageListItem, List, ListItem, TextField} from "@mui/material";
 
 const imgUrl = 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aHVtYW58ZW58MHx8MHx8fDA%3D&w=1000&q=80'
 
@@ -21,7 +19,7 @@ const Posts = () => {
     }
     const postElement = posts.map(({message, id, likesCount}) => {
         return (
-            <ListItem key={id} disablePadding sx={{display: 'block', width: '100%'}}>
+            <ListItem key={id} disablePadding sx={{display: 'block', width: '600px'}}>
                 <Box sx={{display: 'flex', alignItems: 'center'}}>
                     <ImageListItem sx={{width: '50px', height: '50px', borderRadius: '50'}}>
                         <img

@@ -22,15 +22,15 @@ interface ContactType {
 }
 
 export interface ProfileType {
-    userId: number | null
-    aboutMe: string | null
-    lookingForAJob: boolean | null
-    lookingForAJobDescription: string | null
-    fullName: string | null
+    userId: number
+    aboutMe: string
+    lookingForAJob: boolean
+    lookingForAJobDescription: string
+    fullName: string
     contacts: ContactType
     photos: {
-        small: string | null
-        large: string | null
+        small: string
+        large: string
     }
 }
 

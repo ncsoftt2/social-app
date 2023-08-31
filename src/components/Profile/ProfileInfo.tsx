@@ -1,26 +1,23 @@
 import React, {useEffect} from 'react';
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {getProfileThunk, getStatusThunk} from "../../store/profile-reducer/profile-reducer";
-import styled from "styled-components";
 import {ProfileStatus} from "./ProfileStatus";
 import {Box, Grid, ImageListItem} from "@mui/material";
 
 const urlImg = 'https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png'
 
-
 const ProfileInfo = () => {
-    const params = useParams<'*'>()
-    const {profileReducer: {profile,status}, authReducer: {isAuth,data}} = useAppSelector((state) => state)
-    const paramId = params["*"] && +params['*']
+    const {profileReducer: {profile, status}, authReducer: {isAuth, data}} = useAppSelector((state) => state)
     const dispatch = useAppDispatch()
-    const navigate = useNavigate()
+    const params = useParams<'*'>()
+    let paramId = Number(params['*'])
     const getProfile = () => {
-        let userId = paramId
-        if (!userId && data.id ) {
+        let userId: number | null = paramId
+        if (!userId) {
             userId = data.id
         }
-        if(typeof userId === 'number') {
+        if(userId !== null) {
             dispatch(getProfileThunk(userId))
             dispatch(getStatusThunk(userId))
         }
@@ -28,8 +25,6 @@ const ProfileInfo = () => {
     useEffect(() => {
         getProfile()
     }, [paramId])
-    if(!isAuth) navigate('/social-app/login')
-
     return (
         <Grid container>
             <Grid item xs={3}>
@@ -41,15 +36,15 @@ const ProfileInfo = () => {
                     />
                 </ImageListItem>
             </Grid>
-            <Grid item xs={9} sx={{mt:1}}>
-                <Grid container sx={{alignItems:'center',mb:1}}>
-                    <Box sx={{mr:1}}>Статус:</Box>
+            <Grid item xs={9} sx={{mt: 1}}>
+                <Grid container sx={{alignItems: 'center', mb: 1}}>
+                    <Box sx={{mr: 1}}>Статус:</Box>
                     <ProfileStatus status={status}/>
                 </Grid>
-                <Box sx={{mb:1}}>Имя: {profile.fullName}</Box>
-                <Box sx={{mb:1}}>Обо мне: {profile.aboutMe}</Box>
-                <Box sx={{mb:1}}>Ищу работу: {profile.lookingForAJob ? "да" : 'нет'}</Box>
-                <Box sx={{mb:1}}>{profile.lookingForAJob && profile.lookingForAJobDescription}</Box>
+                <Box sx={{mb: 1}}>Имя: {profile.fullName}</Box>
+                <Box sx={{mb: 1}}>Обо мне: {profile.aboutMe}</Box>
+                <Box sx={{mb: 1}}>Ищу работу: {profile.lookingForAJob ? "да" : 'нет'}</Box>
+                <Box sx={{mb: 1}}>{profile.lookingForAJob && profile.lookingForAJobDescription}</Box>
             </Grid>
         </Grid>
     );

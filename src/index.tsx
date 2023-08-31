@@ -5,23 +5,11 @@ import {RouterProvider} from "react-router-dom";
 import {routes} from "./routes/routes";
 import {Provider} from "react-redux";
 import store from "./store";
-import {createTheme, ThemeProvider} from "@mui/material";
-import {orange, teal} from "@mui/material/colors";
+import {ThemeProvider} from "@mui/material";
+import {theme} from "./theme/theme";
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
-
-
-const theme = createTheme({
-    palette: {
-        error: {
-            main:'#ff4939'
-        },
-        success: {
-            main: '#7acb72'
-        }
-    }
-})
 
 root.render(
     <Provider store={store}>

@@ -20,7 +20,7 @@ const reducers = combineReducers({
     authReducer,
     appReducer
 })
-const store = legacy_createStore(reducers,applyMiddleware(thunk))
+const store = legacy_createStore(reducers,composeEnhancers(applyMiddleware(thunk)))
 export default store
 
 type Actions = ProfileAction | DialogsActionType | AuthActionType | UsersAction | AppActionType
