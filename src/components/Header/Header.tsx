@@ -12,7 +12,7 @@ export const Header = () => {
     const handleClickLogout = () => dispatch(logoutThunk())
     const navigate = useNavigate()
     useEffect(() => {
-        if (!data.isAuth) navigate('/login')
+        if (!data.isAuth) navigate('/social-app/login')
     }, [data.isAuth])
     return (
         <Box sx={{ flexGrow: 1 }}>

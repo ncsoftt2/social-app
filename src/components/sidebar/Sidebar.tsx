@@ -7,10 +7,10 @@ export const Sidebar = () => {
     return (
         <>
             <Box sx={{mb:'6px'}}>
-                <NavLink to={`/profile/${data.id}`}>Профиль</NavLink>
+                <NavLink to={`/social-app/profile/${data.id}`}>Профиль</NavLink>
             </Box>
             <Box>
-                <NavLink to='/users'>Пользователи</NavLink>
+                <NavLink to='/social-app/users'>Пользователи</NavLink>
             </Box>
         </>
     )

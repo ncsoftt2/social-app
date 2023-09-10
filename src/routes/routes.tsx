@@ -1,27 +1,36 @@
 import React from "react"
-import {createBrowserRouter} from 'react-router-dom'
+import {createBrowserRouter, Navigate} from 'react-router-dom'
 import { App } from '../components/app/App'
 import { Profile } from '../components/profile/Profile'
 import {UsersPage} from "../pages/UsersPage";
 import {Login} from "../components/login/Login";
+import {ProtectedRoute} from "../components/protected-route/Protected-Route";
 
 export const routes = createBrowserRouter([
     {
-        path: '/',
+        path: '/social-app',
         element: <App />,
         errorElement: <div>error</div>,
         children: [
             {
-                path: '/profile/*',
-                element: <Profile />
+                path: '/social-app/profile/*',
+                errorElement: <div>error</div>,
+                element: (
+                    <ProtectedRoute>
+                        <Profile/>
+                    </ProtectedRoute>
+                )
             },
             {
-                path: '/users',
-                element: <UsersPage/>,
-                errorElement: <div>error</div>
+                path: '/social-app/users',
+                element: (
+                    <ProtectedRoute>
+                        <UsersPage/>
+                    </ProtectedRoute>
+                )
             },
             {
-                path: '/login',
+                path: '/social-app/login',
                 element: <Login />
             }
         ]

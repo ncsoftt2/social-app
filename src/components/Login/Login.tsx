@@ -16,7 +16,7 @@ export const Login = () => {
     const auth = data.isAuth
     useEffect(() => {
         if(auth) {
-            navigate(`/profile/${data.id}`)
+            navigate(`/social-app/profile/${data.id}`)
         }
     },[auth])
     return (

@@ -39,14 +39,9 @@ export const ProfileInfo: FC<PropsType> = (props) => {
         getProfile()
     }, [paramId])
     useEffect(() => {
-        if (data.id === paramId || paramId === 0) navigate(`/profile/${data.id}`)
+        if (data.id === paramId || paramId === 0) navigate(`/social-app/profile/${data.id}`)
     }, [data.id])
     const changePhoto = (e: ChangeEvent<HTMLInputElement>) => {
-        // if(e.target.files !== null) {
-        //     dispatch(savePhotoThunk(e.target.files[0]))
-        // }
-        // const file = e.target.files?.[0];
-        // dispatch(savePhotoThunk(file))
         let files = e.currentTarget.files;
         if (files && files.length > 0) {
             const file = files[0];

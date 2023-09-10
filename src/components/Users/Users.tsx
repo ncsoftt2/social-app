@@ -41,7 +41,7 @@ export const Users: FC<PropsType> = (props) => {
                         const disableBtn = followingProgress.some(fId => fId === id)
                         return <Grid item key={id} xs={3} sx={{textAlign: 'center'}}>
                             <Box sx={{borderRadius: '10px', padding: '10px'}}>
-                                <Link to={`/profile/${id}`}>
+                                <Link to={`/social-app/profile/${id}`}>
                                     <img
                                         style={{height: '100px', borderRadius: '50%'}}
                                         src={photos.small !== null ? photos.small : userImg}
