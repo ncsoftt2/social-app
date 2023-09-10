@@ -1,10 +1,10 @@
+import React, {useEffect} from "react";
+import {useAppDispatch, useAppSelector} from "../../store/hooks";
+import {loginThunk} from "../../store/reducers/auth-reducer/auth-reducer";
+import {useNavigate} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from 'yup';
-import React, {useEffect} from "react";
 import {Box, Button} from "@mui/material";
-import {useAppDispatch, useAppSelector} from "../../store/hooks";
-import {loginThunk} from "../../store/auth-reducer/auth-reducer";
-import {useNavigate} from "react-router-dom";
 
 export const Login = () => {
     const dispatch = useAppDispatch()
@@ -16,7 +16,7 @@ export const Login = () => {
     const auth = data.isAuth
     useEffect(() => {
         if(auth) {
-            navigate(`/social-app/profile/${data.id}`)
+            navigate(`/profile/${data.id}`)
         }
     },[auth])
     return (

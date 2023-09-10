@@ -1,36 +1,27 @@
-import {createBrowserRouter} from "react-router-dom";
-import React from "react";
-import App from "../components/App/App";
-import Profile from "../components/Profile/Profile";
-import Dialogs from "../components/Dialogs/Dialogs";
-import Users from "../components/Users/Users";
-import {Login} from "../components/Login/Login";
-import {ProtectedRoute} from "../components/ProtectedRoute/ProtectedRoute";
+import React from "react"
+import {createBrowserRouter} from 'react-router-dom'
+import { App } from '../components/app/App'
+import { Profile } from '../components/profile/Profile'
+import {UsersPage} from "../pages/UsersPage";
+import {Login} from "../components/login/Login";
 
 export const routes = createBrowserRouter([
     {
-        path:"/social-app",
-        element: <App/>,
+        path: '/',
+        element: <App />,
         errorElement: <div>error</div>,
         children: [
             {
-                path: '/social-app/profile/*',
-                element: (
-                    <ProtectedRoute>
-                        <Profile/>
-                    </ProtectedRoute>
-                )
+                path: '/profile/*',
+                element: <Profile />
             },
             {
-                path: '/social-app/dialogs/*',
-                element: <Dialogs/>
+                path: '/users',
+                element: <UsersPage/>,
+                errorElement: <div>error</div>
             },
             {
-                path: '/social-app/users',
-                element: <Users/>
-            },
-            {
-                path: "/social-app//login",
+                path: '/login',
                 element: <Login />
             }
         ]

@@ -1,13 +1,11 @@
 import {v1} from "uuid";
-import {profileAPI} from "../../api/profileAPI";
-import {ThunkAction} from 'redux-thunk'
-import { RootState, ThunkType} from "../index";
-import {Dispatch} from "redux";
+import {ThunkType} from "../../index";
+import {profileAPI} from "../../../api/profileAPI";
 
-interface PostType {
-    id: string | null
-    message: string | null
-    likesCount: number | null
+export interface PostType {
+    id: string
+    message: string
+    likesCount: number
 }
 
 interface ContactType {
@@ -35,14 +33,12 @@ export interface ProfileType {
 }
 
 export interface ProfileStateType {
-    postMessage: string
     posts: PostType[]
     profile: ProfileType
     status: string
 }
 
 const initialState: ProfileStateType = {
-    postMessage: '',
     posts: [
         {id: v1(), message: 'first post', likesCount: 0},
         {id: v1(), message: 'second post', likesCount: 5},
@@ -56,10 +52,6 @@ export type AddPostType = {
     type: "ADD-POST"
     message: string
 }
-export type UpdatePostMessage = {
-    type: "UPDATE-POST-MESSAGE"
-    postMessage: string
-}
 export type GetProfileType = {
     type: "GET-PROFILE"
     profile: ProfileType
@@ -68,21 +60,23 @@ export type GetStatus = {
     type: "GET-STATUS",
     status: string
 }
-export type ProfileAction = AddPostType | UpdatePostMessage | GetProfileType | GetStatus
+export type RemovePostType = {
+    type: "REMOVE-POST"
+    postId: string
+}
+export type SavePhotoType = {
+    type:"SAVE_PHOTO"
+    photos: string
+}
+export type ProfileAction = AddPostType | GetProfileType | GetStatus | RemovePostType | SavePhotoType
 
-const profileReducer = (state = initialState, action: ProfileAction) => {
+export const profileReducer = (state = initialState, action: ProfileAction) => {
     switch (action.type) {
         case "ADD-POST":
-            const newPost: PostType = {id: v1(), message: state.postMessage, likesCount: 0}
+            const newPost: PostType = {id: v1(), message: action.message, likesCount: 0}
             return {
                 ...state,
                 posts: [newPost, ...state.posts],
-                postMessage: ''
-            }
-        case "UPDATE-POST-MESSAGE":
-            return {
-                ...state,
-                postMessage: action.postMessage
             }
         case "GET-PROFILE":
             return {
@@ -94,41 +88,53 @@ const profileReducer = (state = initialState, action: ProfileAction) => {
                 ...state,
                 status: action.status
             }
+        case "REMOVE-POST":
+            return {
+                ...state,
+                posts: state.posts.filter(p => p.id !== action.postId)
+            }
+        case "SAVE_PHOTO":
+            debugger
+            return {
+                ...state,
+                profile: {
+                    ...state.profile,
+                    photos: action.photos
+                }
+            }
         default:
             return state
     }
 }
 
-
-export default profileReducer;
-
 export const addPostAC = (message: string): AddPostType => ({type: "ADD-POST", message})
-export const updatePostMessageAC = (postMessage: string): UpdatePostMessage => ({
-    type: "UPDATE-POST-MESSAGE",
-    postMessage
-})
+export const removePostAC = (postId: string): RemovePostType => ({type: "REMOVE-POST", postId})
 export const getProfileAC = (profile: ProfileType): GetProfileType => ({type: "GET-PROFILE", profile})
-const getStatus = (status: string):GetStatus => ({type:"GET-STATUS",status})
+const getStatus = (status: string): GetStatus => ({type: "GET-STATUS", status})
+const savePhotoAC = (photos: string):SavePhotoType => ({type:"SAVE_PHOTO",photos})
 
-export const getProfileThunk = (userId: number):ThunkType => {
-    return async (dispatch: Dispatch<ProfileAction>) => {
+export const getProfileThunk = (userId: number): ThunkType => {
+    return async (dispatch) => {
         const data = await profileAPI.getProfile(userId)
         dispatch(getProfileAC(data))
     }
 }
-export const getStatusThunk = (userId:number): ThunkAction<void, RootState, unknown, ProfileAction> => {
+export const getStatusThunk = (userId: number): ThunkType => {
     return async (dispatch) => {
         const data = await profileAPI.getStatusApi(userId)
         dispatch(getStatus(data))
     }
 }
-export const updateStatusThunk = (status:string):ThunkType => {
-    return async (dispatch) => {
-        profileAPI.updateStatusApi(status)
-            .then(res => {
-                if(res.data.resultCode === 0) {
-                    dispatch(getStatus(status))
-                }
-            })
+export const updateStatusThunk = (status: string): ThunkType => async (dispatch) => {
+    const response = await profileAPI.updateStatusApi(status)
+    if (response.data.resultCode === 0) {
+        dispatch(getStatus(status))
+    }
+}
+
+export const savePhotoThunk = (file: File):ThunkType => async (dispatch) => {
+    const response = await profileAPI.savePhoto(file)
+    if (response.data.resultCode === 0) {
+        dispatch(savePhotoAC(response.data.data.photos))
     }
 }

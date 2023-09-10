@@ -1,4 +1,4 @@
-import {ThunkType} from "../index";
+import {ThunkType} from "../../index";
 import {authThunk} from "../auth-reducer/auth-reducer";
 
 const initialState = {
