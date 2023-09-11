@@ -1,4 +1,5 @@
 import {instance} from "./api";
+import {ProfileType} from "../store/reducers/profile-reducer/profile-reducer";
 
 export const profileAPI = {
     async getProfile(userId:number){
@@ -20,5 +21,8 @@ export const profileAPI = {
                 'Content-Type' : 'multipart/form-data'
             }
         })
+    },
+    async saveProfile(profile: ProfileType) {
+        return await instance.put(`/profile`,profile)
     }
 }

@@ -14,7 +14,6 @@ interface PropsType {
 }
 
 export const ProfileStatus: React.FC<PropsType> = React.memo(({status,data,paramId}) => {
-    console.log('STATUS')
     const dispatch = useAppDispatch()
     const [userStatus, setUserStatus] = useState(status)
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => setUserStatus(e.currentTarget.value)
@@ -50,7 +49,7 @@ export const ProfileStatus: React.FC<PropsType> = React.memo(({status,data,param
                         <Box sx={{display: 'flex', alignItems: 'center',mb:'7px'}}>
                             <Box>Статус: {userStatus ? userStatus : 'No status'}</Box>
                             {data.id === paramId && <IconButton onClick={activateEditMode}>
-                                <EditIcon color='primary'/>
+                                <EditIcon color='primary' sx={{fontSize:'16px'}}/>
                             </IconButton>}
                         </Box>
                     )

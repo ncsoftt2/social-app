@@ -8,27 +8,27 @@ export interface PostType {
     likesCount: number
 }
 
-interface ContactType {
-    github: string | null
-    vk: string | null
-    facebook: string | null
-    youtube: string | null
-    instagram: string | null
-    twitter: string | null
-    website: string | null
-    mainLink: string | null
+export interface ContactType {
+    github: string
+    vk: string
+    facebook: string
+    youtube: string
+    instagram: string
+    twitter: string
+    website: string
+    mainLink: string
 }
 
 export interface ProfileType {
-    userId: number
+    userId?: number
     aboutMe: string
     lookingForAJob: boolean
     lookingForAJobDescription: string
     fullName: string
     contacts: ContactType
-    photos: {
-        small: string
-        large: string
+    photos?: {
+        small?: string
+        large?: string
     }
 }
 
@@ -54,7 +54,7 @@ export type AddPostType = {
 }
 export type GetProfileType = {
     type: "GET-PROFILE"
-    profile: ProfileType
+    profile?: ProfileType
 }
 export type GetStatus = {
     type: "GET-STATUS",
@@ -68,7 +68,11 @@ export type SavePhotoType = {
     type:"SAVE_PHOTO"
     photos: string
 }
-export type ProfileAction = AddPostType | GetProfileType | GetStatus | RemovePostType | SavePhotoType
+export type SaveProfileType = {
+    type:"SAVE_PROFILE"
+    profile: ProfileType
+}
+export type ProfileAction = AddPostType | GetProfileType | GetStatus | RemovePostType | SavePhotoType | SaveProfileType
 
 export const profileReducer = (state = initialState, action: ProfileAction) => {
     switch (action.type) {
@@ -94,13 +98,17 @@ export const profileReducer = (state = initialState, action: ProfileAction) => {
                 posts: state.posts.filter(p => p.id !== action.postId)
             }
         case "SAVE_PHOTO":
-            debugger
             return {
                 ...state,
                 profile: {
                     ...state.profile,
                     photos: action.photos
                 }
+            }
+            case "SAVE_PROFILE":
+            return {
+                ...state,
+                profile: action.profile
             }
         default:
             return state
@@ -112,6 +120,7 @@ export const removePostAC = (postId: string): RemovePostType => ({type: "REMOVE-
 export const getProfileAC = (profile: ProfileType): GetProfileType => ({type: "GET-PROFILE", profile})
 const getStatus = (status: string): GetStatus => ({type: "GET-STATUS", status})
 const savePhotoAC = (photos: string):SavePhotoType => ({type:"SAVE_PHOTO",photos})
+const saveProfileAC = (profile: ProfileType):SaveProfileType => ({type:"SAVE_PROFILE",profile})
 
 export const getProfileThunk = (userId: number): ThunkType => {
     return async (dispatch) => {
@@ -136,5 +145,12 @@ export const savePhotoThunk = (file: File):ThunkType => async (dispatch) => {
     const response = await profileAPI.savePhoto(file)
     if (response.data.resultCode === 0) {
         dispatch(savePhotoAC(response.data.data.photos))
+    }
+}
+export const saveProfileThunk = (profile: ProfileType,userId:number):ThunkType => async (dispatch,getState) => {
+    // const userId = getState().authReducer.data.id
+    const response = await profileAPI.saveProfile(profile)
+    if (response.data.resultCode === 0) {
+        dispatch(getProfileThunk(userId))
     }
 }
