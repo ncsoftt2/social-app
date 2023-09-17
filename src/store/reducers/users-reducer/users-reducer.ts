@@ -11,23 +11,6 @@ export type UserType = {
     status: null | string
     followed: boolean
 }
-export type UserStateType = {
-    users: UserType[]
-    pageSize: number
-    totalUsers: number
-    currentPage: number
-    isFetching: boolean
-    followingProgress: number[]
-}
-
-const initialState: UserStateType = {
-    users: [],
-    pageSize: 12,
-    totalUsers: 0,
-    currentPage: 1,
-    isFetching: false,
-    followingProgress: [] as number[]
-}
 
 export type GetUsersType = {
     type: "GET-USERS"
@@ -58,12 +41,40 @@ export type ToggleIsFollowingProgress = {
     isFetchingProgress: boolean,
     userId: number
 }
+export type SetFilterType = ReturnType<typeof setFilterAC>
 
 export type UsersAction = GetUsersType | FollowType | UnFollowType |
     SetTotalUsersType | SetCurrentPageType |
-    SetIsFetchingType | ToggleIsFollowingProgress
+    SetIsFetchingType | ToggleIsFollowingProgress | SetFilterType
+
+export type UserStateType = {
+    users: UserType[]
+    pageSize: number
+    totalUsers: number
+    currentPage: number
+    isFetching: boolean
+    followingProgress: number[]
+    filter: {
+        term: string
+        friend: null | boolean
+    }
+}
+
+const initialState: UserStateType = {
+    users: [] as UserType[],
+    pageSize: 12,
+    totalUsers: 0,
+    currentPage: 1,
+    isFetching: false,
+    followingProgress: [] as number[],
+    filter: {
+        term: '',
+        friend: null as null | boolean
+    }
+}
 
 type InitialState = typeof initialState
+export type FilterType = typeof initialState.filter
 
 export const usersReducer = (state = initialState, action: UsersAction): InitialState => {
     switch (action.type) {
@@ -115,6 +126,11 @@ export const usersReducer = (state = initialState, action: UsersAction): Initial
                     ? [...state.followingProgress, action.userId]
                     : state.followingProgress.filter(el => el !== action.userId)
             }
+        case "SET-FILTER":
+            return {
+                ...state,
+                filter: action.payload
+            }
         default:
             return state
     }
@@ -128,13 +144,14 @@ export const setCurrentPageAC = (currentPage: number): SetCurrentPageType => ({t
 const toggleFetchingAC = (isFetching: boolean): SetIsFetchingType => ({type: "TOGGLE-IS-FETCHING", isFetching})
 export const toggleIsFollowingProgress = (isFetchingProgress: boolean, userId: number): ToggleIsFollowingProgress =>
     ({type: "TOGGLE-IS-FOLLOWING-PROGRESS", userId, isFetchingProgress})
+const setFilterAC = (filter:FilterType) => ({type:"SET-FILTER",payload:filter} as const)
 
-
-export const getUsersThunk = (currentPage: number, pageSize: number): ThunkType => {
+export const getUsersThunk = (currentPage: number, pageSize: number,filter:FilterType): ThunkType => {
     return async (dispatch) => {
         dispatch(toggleFetchingAC(true))
         dispatch(setCurrentPageAC(currentPage))
-        const data = await usersAPI.getUsersAPI(currentPage, pageSize)
+        dispatch(setFilterAC(filter))
+        const data = await usersAPI.getUsersAPI(currentPage, pageSize,filter.term,filter.friend)
         dispatch(getUsersAC(data.items))
         dispatch(setTotalUsersAC(data.totalCount))
         dispatch(toggleFetchingAC(false))

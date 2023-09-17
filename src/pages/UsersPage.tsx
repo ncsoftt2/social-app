@@ -4,11 +4,11 @@ import {getUsersThunk} from "../store/reducers/users-reducer/users-reducer";
 
 export const UsersPage = () => {
     const {
-        users, totalUsers, currentPage, pageSize, isFetching, followingProgress
+        users, totalUsers, currentPage, pageSize, isFetching, followingProgress,filter
     } = useAppSelector(({usersReducer}) => usersReducer)
     const dispatch = useAppDispatch()
     const getUsers = () => {
-        dispatch(getUsersThunk(currentPage, pageSize))
+        dispatch(getUsersThunk(currentPage, pageSize,filter))
     }
     return <Users
         users={users}
@@ -18,5 +18,6 @@ export const UsersPage = () => {
         followingProgress={followingProgress}
         getUsers={getUsers}
         isFetching={isFetching}
+        filter={filter}
     />
 }
